@@ -38,6 +38,7 @@ const defaultInnerTemplateSource = util.createElement(`
   <div>
     <div class="tab-bar__icon">
       <ons-icon icon="ion-cloud"></ons-icon>
+      <div class="tab-bar__badge">1</div>
     </div>
     <div class="tab-bar__label">label</div>
   </div>
@@ -134,6 +135,14 @@ export default class TabElement extends BaseElement {
    */
 
   /**
+   * @attribute badge
+   * @type {String}
+   * @description
+   *   [en]A content for the badge of the tab item.[/en]
+   *   [ja]バッジに表示する内容を指定します。[/ja]
+   */
+
+  /**
    * @attribute active
    * @description
    *   [en]This attribute should be set to the tab that is active by default.[/en]
@@ -144,7 +153,7 @@ export default class TabElement extends BaseElement {
     this._pageLoader = defaultPageLoader;
     this._page = null;
 
-    if (this.hasAttribute('label') || this.hasAttribute('icon')) {
+    if (this.hasAttribute('label') || this.hasAttribute('icon') || this.hasAttribute('badge')) {
       this._compile();
     } else {
       contentReady(this, () => {
@@ -252,11 +261,16 @@ export default class TabElement extends BaseElement {
       if (!button.querySelector('.tab-bar__label')) {
         button.appendChild(template.querySelector('.tab-bar__label'));
       }
+
+      if (!button.querySelector('.tab-bar__badge')) {
+        button.appendChild(template.querySelector('.tab-bar__badge'));
+      }
     }
 
     const self = this;
     const icon = this.getAttribute('icon');
     const label = this.getAttribute('label');
+    const badge = this.getAttribute('badge');
 
     if (typeof icon === 'string') {
       getIconElement().setAttribute('icon', icon);
@@ -276,12 +290,25 @@ export default class TabElement extends BaseElement {
       }
     }
 
+    if (typeof badge === 'string') {
+      getBadgeElement().textContent = badge;
+    } else {
+      const badge = getBadgeElement();
+      if (badge) {
+        badge.remove();
+      }
+    }
+
     function getLabelElement() {
       return self.querySelector('.tab-bar__label');
     }
 
     function getIconElement() {
       return self.querySelector('ons-icon');
+    }
+
+    function getBadgeElement() {
+      return self.querySelector('.tab-bar__badge');
     }
   }
 
@@ -432,7 +459,7 @@ export default class TabElement extends BaseElement {
   }
 
   static get observedAttributes() {
-    return ['modifier', 'ripple', 'icon', 'label', 'page'];
+    return ['modifier', 'ripple', 'icon', 'label', 'page', 'badge'];
   }
 
   attributeChangedCallback(name, last, current) {
@@ -445,6 +472,7 @@ export default class TabElement extends BaseElement {
         break;
       case 'icon':
       case 'label':
+      case 'badge':
         contentReady(this, () => this._updateDefaultTemplate());
         break;
       case 'page':
