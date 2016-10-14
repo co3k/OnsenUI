@@ -169,7 +169,7 @@ describe('OnsTabElement', () => {
         expect(document.getElementsByClassName('tab-bar__badge')[0]).to.be.ok;
         expect(document.getElementsByClassName('tab-bar__badge')[0].innerHTML).to.equal('99+');
 
-        element.setAttribute('label', '98');
+        element.setAttribute('badge', '98');
         expect(document.getElementsByClassName('tab-bar__badge')[0].innerHTML).to.equal('98');
         expect(document.getElementsByClassName('tab-bar__badge')[0].innerHTML).not.to.equal('99+');
 

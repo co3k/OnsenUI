@@ -38,9 +38,9 @@ const defaultInnerTemplateSource = util.createElement(`
   <div>
     <div class="tab-bar__icon">
       <ons-icon icon="ion-cloud"></ons-icon>
-      <div class="tab-bar__badge">1</div>
     </div>
     <div class="tab-bar__label">label</div>
+    <div class="tab-bar__badge notification">1</div>
   </div>
 `);
 
@@ -247,24 +247,23 @@ export default class TabElement extends BaseElement {
     }
 
     const button = util.findChild(this, '.tab-bar__button');
-
+    const template = defaultInnerTemplateSource.cloneNode(true);
     if (button.children.length == 0) {
-      const template = defaultInnerTemplateSource.cloneNode(true);
       while (template.children[0]) {
         button.appendChild(template.children[0]);
       }
+    }
 
-      if (!button.querySelector('.tab-bar__icon')) {
-        button.insertBefore(template.querySelector('.tab-bar__icon'), button.firstChild);
-      }
+    if (!button.querySelector('.tab-bar__icon')) {
+      button.insertBefore(template.querySelector('.tab-bar__icon'), button.firstChild);
+    }
 
-      if (!button.querySelector('.tab-bar__label')) {
-        button.appendChild(template.querySelector('.tab-bar__label'));
-      }
+    if (!button.querySelector('.tab-bar__label')) {
+      button.appendChild(template.querySelector('.tab-bar__label'));
+    }
 
-      if (!button.querySelector('.tab-bar__badge')) {
-        button.appendChild(template.querySelector('.tab-bar__badge'));
-      }
+    if (!button.querySelector('.tab-bar__badge')) {
+      button.appendChild(template.querySelector('.tab-bar__badge'));
     }
 
     const self = this;
